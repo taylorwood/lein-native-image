@@ -2,26 +2,29 @@
 
 A Leiningen plugin for generating GraalVM native images from your project.
 
-The `lein native-image` command builds an uberjar from your project, then uses GraalVM's `native-image` to build a native image from the uberjar.
+The `lein native-image` command builds an uberjar from your project, then uses GraalVM's [`native-image`](https://www.graalvm.org/docs/reference-manual/aot-compilation/) to build a native image from the uberjar.
+
+[![Clojars Project](https://img.shields.io/clojars/v/io.taylorwood/lein-native-image.svg)](https://clojars.org/io.taylorwood/lein-native-image)
 
 ## Prerequisites
 
-* `lein-native-image` depends on [GraalVM](https://www.graalvm.org/downloads/) to build native images.
+* This plugin depends on [GraalVM](https://www.graalvm.org/downloads/) to build native images.
 * Your project.clj must specify a `:main` namespace w/entrypoint and support AOT compilation.
     ```clojure
-    (defproject app "0.1.0-SNAPSHOT"
+    (defproject my-app "0.1.0-SNAPSHOT"
       :main ^:skip-aot app.core
       :profiles {:uberjar {:aot :all}})
     ```
 
 ## Usage
 
-1. Put `[io.taylorwood/lein-native-image "0.1.0-SNAPSHOT"]` into the `:plugins` vector of your project.clj, or in your Leiningen user profile.
+1. Put `[io.taylorwood/lein-native-image "0.1.0"]` into the `:plugins` vector of your project.clj, or in your Leiningen user profile.
 
-1. Optionally, specify a custom image name, and/or the path to GraalVM's `bin` directory or `native-image` path in your project.clj:
+1. Optionally specify a custom image name and/or path to GraalVM's `bin` directory or `native-image` path in your project.clj:
     ```clojure
-    :native-image {:name "optional_custom_image_name"
-                   :graal-bin "/path/to/graalvm-1.0.0-rc1/bin"}
+    (defproject my-app "0.1.0-SNAPSHOT"
+      :native-image {:name "optional_custom_image_name"
+                     :graal-bin "/path/to/graalvm-1.0.0-rc1/bin"})
     ```
     
     The `:graal-bin` path can also be resolved from an environment variable using a keyword e.g. `:env/GRAAL_HOME`.
@@ -30,11 +33,11 @@ The `lein native-image` command builds an uberjar from your project, then uses G
 
 1. Build a native image from your project:
 
-    ```bash
+    ```
     $ lein native-image
-    Compiling app.core
-    Created /path/to/app/target/app-0.1.0-SNAPSHOT.jar
-    Created /path/to/app/target/app-0.1.0-SNAPSHOT-standalone.jar
+    Compiling my-app.core
+    Created /path/to/my-app/target/my-app-0.1.0-SNAPSHOT.jar
+    Created /path/to/my-app/target/my-app-0.1.0-SNAPSHOT-standalone.jar
     Build on Server(pid: 24379, port: 26681)
        classlist:     532.79 ms
            (cap):   1,434.35 ms
@@ -51,12 +54,12 @@ The `lein native-image` command builds an uberjar from your project, then uses G
            image:     572.62 ms
            write:     879.95 ms
          [total]:  11,423.27 ms
-    Created native image /path/to/app/target/app-0.1.0-SNAPSHOT-standalone
+    Created native image /path/to/my-app/target/my-app-0.1.0-SNAPSHOT-standalone
     ```
 
 1. Execute the native image:
-    ```bash
-    $ ./target/app-0.1.0-SNAPSHOT-standalone with optional args
+    ```
+    $ ./target/my-app-0.1.0-SNAPSHOT-standalone with optional args
     Hello, World!
     ```
 
