@@ -2,8 +2,10 @@
   "Builds a native image from project uberjar using GraalVM."
   (:require [clojure.java.io :as io]
             [clojure.string :as cs]
+            [leiningen.compile :as compile]
+            [leiningen.core.classpath :as classpath]
             [leiningen.core.eval :as eval]
-            [leiningen.core.main :as main]
+            [leiningen.core.main :refer [debug info warn exit]]
             [leiningen.uberjar :refer [uberjar]])
   (:import (java.io File)))
 
@@ -27,24 +29,38 @@
 
     :else bin))
 
-(defn- build-native-image [native-image-bin jar-path out-path]
-  (main/debug "Building native image from uberjar" jar-path "to" out-path)
-  (eval/sh native-image-bin
-           "-jar" jar-path
-           (format "-H:Name=%s" out-path)
-           "-H:+ReportUnsupportedElementsAtRuntime"))
+(defn- build-native-image
+  "Executes native-image (bin-path) with opts, specifying a classpath,
+   main/entrypoint class, and destination path. Returns native-image exit code."
+  [bin-path opts cp main dest]
+  (debug "Building native image" dest "with classpath" cp)
+  (let [all-args (cond-> []
+                   (seq opts) (into opts)
+                   dest       (conj (format "-H:Name=%s" dest))
+                   cp         (into ["-cp" cp])
+                   main       (conj main))]
+    (apply eval/sh bin-path all-args)))
 
 (defn native-image
   "Create a native image of your project using GraalVM's native-image."
   [project & _args]
-  (let [native-image-path (native-image-path (get-in project [:native-image :graal-bin]))
-        out-path (absolute-path
-                   (:target-path project)
-                   (or (get-in project [:native-image :name])
-                       (format "%s-%s" (:name project) (:version project))))
-        jar-path (uberjar project)
-        exit-code (build-native-image native-image-path jar-path out-path)]
+  (compile/compile project :all)
+  (let [config     (:native-image project)
+        entrypoint (-> (name (:main project))
+                       (cs/replace #"\-" "_"))
+        dest-path  (absolute-path
+                    (:target-path project)
+                    (or (:name config)
+                        (format "%s-%s" (:name project) (:version project))))
+        exit-code  (build-native-image
+                    (native-image-path (:graal-bin config))
+                    (:opts config)
+                    (->> (classpath/get-classpath project)
+                         (filter #(.exists (io/file %)))
+                         (cs/join File/pathSeparatorChar))
+                    entrypoint
+                    dest-path)]
     (if (zero? exit-code)
-      (main/info "Created native image" out-path)
-      (main/warn "Failed to create native image"))
-    (main/exit exit-code)))
+      (info "Created native image" dest-path)
+      (do (warn "Failed to create native image")
+          (exit exit-code "native-image failed with exit code" exit-code)))))
