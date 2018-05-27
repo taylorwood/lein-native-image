@@ -14,7 +14,7 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
     ```clojure
     (defproject my-app "0.1.0"
       :dependencies [[org.clojure/clojure "1.9.0"]]
-      :plugins [[io.taylorwood/lein-native-image "0.2.0-SNAPSHOT"]]
+      :plugins [[io.taylorwood/lein-native-image "0.2.0"]]
       :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc1/Contents/Home/bin"
                      :name "my-app"}
       :main ^:skip-aot my-app.core
@@ -28,7 +28,7 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
 
 ## Usage
 
-1. Put `[io.taylorwood/lein-native-image "0.2.0-SNAPSHOT"]` into the `:plugins` vector of your project.clj, or in your Leiningen user profile.
+1. Put `[io.taylorwood/lein-native-image "0.2.0"]` into the `:plugins` vector of your project.clj, or in your Leiningen user profile.
 
 1. Optionally specify a custom image name, path to GraalVM's `bin` directory or `native-image` path, or `native-image` CLI options in your project.clj:
     ```clojure
@@ -45,7 +45,7 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
 
     You can also specify these in your Leiningen user profile `~/.lein/profiles.clj`:
     ```clojure
-    {:user {:plugins [[io.taylorwood/lein-native-image "0.2.0-SNAPSHOT"]]
+    {:user {:plugins [[io.taylorwood/lein-native-image "0.2.0"]]
             :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc1/Contents/Home/bin"}}}
     ```
 

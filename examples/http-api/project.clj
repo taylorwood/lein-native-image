@@ -6,9 +6,9 @@
                  [compojure "1.6.1"]
                  [clj-http-lite "0.3.0"]
                  [hickory "0.7.1"]]
-  :plugins [[io.taylorwood/lein-native-image "0.2.0-SNAPSHOT"]]
+  :plugins [[io.taylorwood/lein-native-image "0.2.0"]]
   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
-  :native-image {:graal-bin "/Users/Taylor/Projects/graalvm-1.0.0-rc1/Contents/Home/bin"
+  :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc1/Contents/Home/bin"
                  :opts ["-H:EnableURLProtocols=http"
                         "-H:+ReportUnsupportedElementsAtRuntime" ;; ignore native-image build errors
                         "--no-server" ;; TODO issue with subsequent builds failing on same server
