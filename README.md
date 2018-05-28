@@ -28,6 +28,9 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
 
 ## Usage
 
+See the [examples](https://github.com/taylorwood/lein-native-image/tree/master/examples) directory for apps
+that can be compiled to native images with GraalVM.
+
 1. Put `[io.taylorwood/lein-native-image "0.2.0"]` into the `:plugins` vector of your project.clj, or in your Leiningen user profile.
 
 1. Optionally specify a custom image name, path to GraalVM's `bin` directory or `native-image` path, or `native-image` CLI options in your project.clj:
@@ -70,10 +73,16 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
 
 ## Notes
 
+GraalVM and Substrate VM's support for AOT compilation and native images is evolving.
+There are [limitations](https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md) and [unsupported features](https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md) you will likely encounter.
+This release was tested with GraalVM 1.0.0-RC1 EE; some of these notes may not apply to future releases.
+At least one AOT issue has been fixed since 1.0.0-RC1, but you must build Substrate VM locally to get unreleased fixes.
+
 When the `:opts ["-H:+ReportUnsupportedElementsAtRuntime"]` flag is set, some `native-image` build issues will be deferred as runtime exceptions.
 To avoid spurious runtime errors, don't use this flag for "production" builds.
 
-You may need to specify `:opts ["-H:EnableURLProtocols=http"]` when using some HTTP libraries.
+You may need to specify `:opts ["-H:EnableURLProtocols=http"]` to use HTTP libraries.
+_HTTPS is currently in development and unsupported!_
 
 Specifying `:jvm-opts ["-Dclojure.compiler.direct-linking=true"]` might allow for better optimizations by GraalVM.
 
@@ -86,7 +95,7 @@ You can specify `:opts ["--no-server"]` to not spawn a build server at all, or u
 
 [Native Clojure with GraalVM](https://www.innoq.com/en/blog/native-clojure-and-graalvm/)
 
-[Instant Netty Startup using GraalVM](https://medium.com/graalvm/instant-netty-startup-using-graalvm-native-image-generation-ed6f14ff7692)
+[Instant Netty Startup using GraalVM](https://medium.com/graalvm/instant-netty-startup-using-graalvm-native-image-generation-ed6f14ff7692) (and [source](https://github.com/cstancu/netty-native-demo))
 
 ## Contributing
 
