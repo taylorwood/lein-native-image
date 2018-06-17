@@ -23,7 +23,7 @@ The `lein native-image` command compiles your project then uses GraalVM's [`nati
                  {:native-image {:opts ["-H:+ReportUnsupportedElementsAtRuntime"
                                         "--verbose"]}}
                  :uberjar {:aot :all
-                           :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+                           :native-image {:opts ["-Dclojure.compiler.direct-linking=true"]}}})
     ```
 
 ## Usage
