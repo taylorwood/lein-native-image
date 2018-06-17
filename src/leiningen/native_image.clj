@@ -17,15 +17,19 @@
     (nil? bin)
     "native-image" ;; assumed to be on PATH
 
-    (string? bin)
-    (if (cs/ends-with? bin "/native-image")
-      bin
-      (absolute-path bin "native-image"))
-
     (keyword? bin)
     (if (= "env" (namespace bin))
       (native-image-path (System/getenv (name bin)))
       (native-image-path (name bin)))
+
+    (string? bin)
+    (if (cs/ends-with? bin "/native-image")
+      bin
+      (->> [(io/file bin "bin/native-image")
+            (io/file bin "native-image")]
+           (filter #(.exists %))
+           (first)
+           (absolute-path)))
 
     :else bin))
 
@@ -58,7 +62,8 @@
                     (or (:name config)
                         (format "%s-%s" (:name project) (:version project))))
         exit-code  (build-native-image
-                    (native-image-path (:graal-bin config))
+                    (native-image-path (or (:graal-bin config)
+                                           (System/getenv "GRAALVM_HOME")))
                     (:opts config)
                     (->> (classpath/get-classpath project)
                          (filter #(.exists (io/file %)))
