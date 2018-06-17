@@ -6,7 +6,7 @@
             [leiningen.core.classpath :as classpath]
             [leiningen.core.eval :as eval]
             [leiningen.core.main :refer [debug info warn exit]]
-            [leiningen.uberjar :refer [uberjar]])
+            [leiningen.core.project :as project])
   (:import (java.io File)))
 
 (defn- absolute-path [f & fs]
@@ -45,7 +45,12 @@
   "Create a native image of your project using GraalVM's native-image."
   [project & _args]
   (compile/compile project :all)
-  (let [config     (:native-image project)
+  (let [profile    (or (get-in project [:profiles :native-image])
+                       (get-in project [:profiles :uberjar]))
+        project    (if profile
+                     (project/merge-profiles project [profile])
+                     project)
+        config     (:native-image project)
         entrypoint (-> (name (:main project))
                        (cs/replace #"\-" "_"))
         dest-path  (absolute-path

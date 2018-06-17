@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+### Fixed
+- The consuming project's `:uberjar` profile was not merged by default. 
+  Specifying a `:native-image` profile will override this behavior.
 
 ## [0.2.0] - 2018-05-27
 ### Added

@@ -46,6 +46,8 @@ that can be compiled to native images with GraalVM.
     - If `:graal-bin` is unspecified, GraalVM's `native-image` is assumed to be on your PATH.
     - `:opts` is an optional vector of arguments to `native-image`; see its [documentation](https://www.graalvm.org/docs/reference-manual/aot-compilation/#image-generation-options) for more.
 
+    The plugin will merge the task-specific profile `:native-image`, or `:uberjar` if that doesn't exist.
+
     You can also specify these in your Leiningen user profile `~/.lein/profiles.clj`:
     ```clojure
     {:user {:plugins [[io.taylorwood/lein-native-image "0.2.0"]]
