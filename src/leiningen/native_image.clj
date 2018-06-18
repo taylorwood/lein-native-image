@@ -48,12 +48,12 @@
 (defn native-image
   "Create a native image of your project using GraalVM's native-image."
   [project & _args]
-  (compile/compile project :all)
   (let [profile    (or (get-in project [:profiles :native-image])
                        (get-in project [:profiles :uberjar]))
         project    (if profile
                      (project/merge-profiles project [profile])
                      project)
+        _          (compile/compile project :all)
         config     (:native-image project)
         entrypoint (-> (name (:main project))
                        (cs/replace #"\-" "_"))

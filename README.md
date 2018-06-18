@@ -42,8 +42,8 @@ that can be compiled to native images with GraalVM.
     ```
 
     - `:name` is an optional name for the generated native image. 
-    - The `:graal-bin` path can also be resolved from an environment variable using a keyword e.g. `:env/GRAALVM_HOME`.
-    - If `:graal-bin` is unspecified, GraalVM's `native-image` is assumed to be on your PATH.
+    - The `:graal-bin` path can be specified as a string or resolved from an environment variable using a keyword e.g. `:env/GRAALVM_HOME`.
+      If `:graal-bin` is unspecified, the `GRAALVM_HOME` environment variable will be used by default.
     - `:opts` is an optional vector of arguments to `native-image`; see its [documentation](https://www.graalvm.org/docs/reference-manual/aot-compilation/#image-generation-options) for more.
 
     The plugin will merge the task-specific profile `:native-image`, or `:uberjar` if that doesn't exist.
