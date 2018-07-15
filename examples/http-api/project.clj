@@ -8,7 +8,7 @@
                  [hickory "0.7.1"]]
   :plugins [[io.taylorwood/lein-native-image "0.2.0"]]
   :target-path "target/%s"
-  :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc1/Contents/Home/bin"
+  :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc2/Contents/Home/bin"
                  :opts ["-Dclojure.compiler.direct-linking=true"
                         "-H:EnableURLProtocols=http"
                         "-H:+ReportUnsupportedElementsAtRuntime" ;; ignore native-image build errors

@@ -4,7 +4,13 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.json "0.2.6"]]
   :main jdnsmith.core
+  :target-path "target/%s"
   :native-image {:graal-bin :env/GRAALVM_HOME
                  :opts ["--verbose"]
                  :name "jdn"}
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:dev {:global-vars {*warn-on-reflection* true
+                                 *assert* true}}
+             :uberjar {:aot :all
+                       :native-image {:opts ["--verbose"
+                                             "-Dclojure.compiler.direct-linking=true"]
+                                      :graal-bin :env/GRAALVM_HOME}}})

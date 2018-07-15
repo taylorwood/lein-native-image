@@ -1,6 +1,7 @@
 (ns http-api.handler
   (:require
    [clj-http.lite.client :as http]
+   [clojure.java.io :as io]
    [compojure.core :refer :all]
    [compojure.route :as route]
    [hickory.core :as hick]
@@ -28,4 +29,4 @@
 (def app
   (routes
    (wrap-routes #'my-routes json/wrap-json-response)
-   (route/not-found {:status 404 :body "Nope!"})))
+   (route/not-found {:status 404 :body (slurp (io/resource "not-found.html"))})))
