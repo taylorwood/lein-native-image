@@ -7,6 +7,8 @@ The `lein native-image` command compiles your project then uses GraalVM's
 
 [![Clojars Project](https://img.shields.io/clojars/v/io.taylorwood/lein-native-image.svg)](https://clojars.org/io.taylorwood/lein-native-image)
 
+<sup>For deps.edn projects, try [clj.native-image](https://github.com/taylorwood/clj.native-image).</sup>
+
 ## Prerequisites
 
 * This plugin depends on [GraalVM](https://www.graalvm.org/downloads/) to build native images.
