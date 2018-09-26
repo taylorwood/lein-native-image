@@ -23,6 +23,7 @@ See the [examples](examples) directory for projects that can be compiled to nati
 
 * [jdnsmith](examples/jdnsmith) - CLI command to read JSON from stdin and write EDN to stdout.
 * [http-api](examples/http-api) - Basic HTTP server using Ring, Compojure, http-kit.
+* [nlp](examples/nlp) - CLI command to analyze sentiment of text using StanfordNLP. Includes examples of reflection hints and delaying static initialization.
 
 ## Usage
 

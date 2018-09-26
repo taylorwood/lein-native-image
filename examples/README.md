@@ -34,3 +34,13 @@ You can now make requests to endpoints that in turn make HTTP requests to other 
    ```
 
 The project's `core.clj` also demonstrates a workaround for dealing with `native-image` limitations related to runtime reflection.
+
+## nlp
+
+A CLI tool to do sentiment analysis on text inputs. Pipe some text into it and get a sentiment index.
+```
+➜ echo "Oh wow, I can't believe how great this is." | ./nlp
+4.0
+➜ echo "This is the worst thing I've ever seen." | ./nlp
+0.0
+```
