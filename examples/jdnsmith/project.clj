@@ -11,6 +11,5 @@
   :profiles {:dev {:global-vars {*warn-on-reflection* true
                                  *assert* true}}
              :uberjar {:aot :all
-                       :native-image {:opts ["--verbose"
-                                             "-Dclojure.compiler.direct-linking=true"]
+                       :native-image {:opts ["-Dclojure.compiler.direct-linking=true"]
                                       :graal-bin :env/GRAALVM_HOME}}})

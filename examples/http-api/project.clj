@@ -11,7 +11,7 @@
   :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc2/Contents/Home/bin"
                  :opts ["-Dclojure.compiler.direct-linking=true"
                         "-H:EnableURLProtocols=http"
-                        "-H:+ReportUnsupportedElementsAtRuntime" ;; ignore native-image build errors
+                        "--report-unsupported-elements-at-runtime" ;; ignore native-image build errors
                         "--no-server" ;; TODO issue with subsequent builds failing on same server
                         "--verbose"]
                  :name "server"}

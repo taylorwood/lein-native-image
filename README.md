@@ -39,7 +39,7 @@ See the [examples](examples) directory for projects that can be compiled to nati
 
       ;; optionally set profile-specific :native-image overrides
       :profiles {:test    ;; e.g. lein with-profile +test native-image
-                 {:native-image {:opts ["-H:+ReportUnsupportedElementsAtRuntime"
+                 {:native-image {:opts ["--report-unsupported-elements-at-runtime"
                                         "--verbose"]}}
     
                  :uberjar ;; used by default
@@ -96,8 +96,9 @@ you will likely encounter. This release was tested with GraalVM 1.0.0-RC1 EE; so
 may not apply to future releases. At least one AOT issue has been fixed since 1.0.0-RC1, but you
 must build Substrate VM locally to get unreleased fixes.
 
-When the `:opts ["-H:+ReportUnsupportedElementsAtRuntime"]` flag is set, some `native-image` build
-issues will be deferred as runtime exceptions.
+When the `:opts ["--report-unsupported-elements-at-runtime"]` flag is set,
+some `native-image` AOT compilation issues will be deferred as runtime exceptions.
+You can try specifying this flag if `native-image` compilation fails.
 To avoid unexpected errors at runtime, don't use this flag for "production" builds.
 
 You may need to set `:opts ["-H:EnableURLProtocols=http"]` to use HTTP libraries.
