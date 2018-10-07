@@ -101,8 +101,9 @@ some `native-image` AOT compilation issues will be deferred as runtime exception
 You can try specifying this flag if `native-image` compilation fails.
 To avoid unexpected errors at runtime, don't use this flag for "production" builds.
 
-You may need to set `:opts ["-H:EnableURLProtocols=http"]` to use HTTP libraries.
-HTTPS is currently [unavailable but upcoming](https://github.com/oracle/graal/issues/392#issuecomment-385814898).
+You should set `:opts ["--enable-url-protocols=http"]` to use HTTP libraries.
+HTTPS is available as of 1.0.0-RC7 (e.g. `--enable-url-protocols=http,https`)
+but [requires additional configuration](https://github.com/oracle/graal/blob/master/substratevm/URL-PROTOCOLS.md#https-support).
 
 Specifying `:jvm-opts ["-Dclojure.compiler.direct-linking=true"]` might allow for better
 compile-time optimizations.
