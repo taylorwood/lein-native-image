@@ -1,0 +1,18 @@
+{:deps {org.clojure/clojure {:mvn/version "1.9.0"}
+        http-kit {:mvn/version "2.3.0"}
+        ring/ring-core {:mvn/version "1.6.3"}
+        ring/ring-json {:mvn/version "0.4.0"}
+        cheshire {:mvn/version "5.7.1"}
+        compojure {:mvn/version "1.6.1"}
+        clj-http-lite {:mvn/version "0.3.0"}
+        hickory {:mvn/version "0.7.1"}}
+ :paths ["src" "resources"]
+ :aliases {:native-image
+           {:main-opts ["-m clj.native-image http-api.core"
+                        "-H:EnableURLProtocols=http"
+                        "--report-unsupported-elements-at-runtime"]
+            :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
+            :extra-deps
+            {clj.native-image
+             {:git/url "https://github.com/taylorwood/clj.native-image.git"
+              :sha "567176ddb0f7507c8b0969e0a10f60f848afaf7d"}}}}}

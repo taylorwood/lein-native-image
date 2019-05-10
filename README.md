@@ -44,7 +44,7 @@ See the [examples](examples) directory for projects that can be compiled to nati
     
                  :uberjar ;; used by default
                  {:aot :all
-                  :native-image {:opts ["-Dclojure.compiler.direct-linking=true"]}}})
+                  :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}})
     ```
 
     `:native-image` config keys:
