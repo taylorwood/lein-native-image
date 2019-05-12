@@ -9,6 +9,8 @@
   :native-image {:name "nlp"
                  :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
                  :opts ["-H:ReflectionConfigurationFiles=reflection.json"
-                        "--delay-class-initialization-to-runtime=edu.stanford.nlp.trees.international.pennchinese.ChineseEnglishWordMap$SingletonHolder,edu.stanford.nlp.process.WordShapeClassifier$DistributionalClusters"]}
+                        "--report-unsupported-elements-at-runtime"
+                        "--initialize-at-run-time=edu.stanford.nlp.trees.international.pennchinese.ChineseEnglishWordMap$SingletonHolder,edu.stanford.nlp.process.WordShapeClassifier$DistributionalClusters"
+                        "--initialize-at-build-time"]}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

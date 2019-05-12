@@ -12,10 +12,22 @@ The `lein native-image` command compiles your project then uses GraalVM's
 ## Prerequisites
 
 * This plugin depends on [GraalVM](https://www.graalvm.org/downloads/) to build native images.
+
+  **NOTE:** As of GraalVM 19.0.0, `native-image` is no longer included by default:
+  > Native Image was extracted from the base GraalVM distribution. Currently it is available as an early adopter plugin. To install it, run: `gu install native-image`. After this additional step, the `native-image` executable will be in the `bin` directory, as for the previous releases.
+
+  ```
+  ➜ $GRAALVM_HOME/bin/gu install native-image
+  Downloading: Component catalog from www.graalvm.org
+  Processing component archive: Native Image
+  Downloading: Component native-image: Native Image  from github.com
+  Installing new component: Native Image licence files (org.graalvm.native-image, version 19.0.0)
+  ```
+  
 * Your project.clj must set a `:main` namespace w/entrypoint and support AOT compilation:
-    ```clojure
-    :main ^:skip-aot my-app.core
-    ```
+  ```clojure
+  :main ^:skip-aot my-app.core
+  ```
 
 ## Examples
 
@@ -23,7 +35,8 @@ See the [examples](examples) directory for projects that can be compiled to nati
 
 * [jdnsmith](examples/jdnsmith) - CLI command to read JSON from stdin and write EDN to stdout.
 * [http-api](examples/http-api) - Basic HTTP server using Ring, Compojure, http-kit.
-* [nlp](examples/nlp) - CLI command to analyze sentiment of text using StanfordNLP. Includes examples of reflection hints and delaying static initialization.
+* [nlp](examples/nlp) - CLI command to analyze sentiment of text using StanfordNLP. Includes examples of reflection hints and delaying class initialization.
+* [clojurl](https://github.com/taylorwood/clojurl) - cURL-like tool using clojure.spec, HTTPS, hiccup.
 
 ## Usage
 
@@ -40,6 +53,7 @@ See the [examples](examples) directory for projects that can be compiled to nati
       ;; optionally set profile-specific :native-image overrides
       :profiles {:test    ;; e.g. lein with-profile +test native-image
                  {:native-image {:opts ["--report-unsupported-elements-at-runtime"
+                                        "--initialize-at-build-time"
                                         "--verbose"]}}
     
                  :uberjar ;; used by default
@@ -88,20 +102,26 @@ See the [examples](examples) directory for projects that can be compiled to nati
 The primary benefits to using a GraalVM native image are faster startup, lower memory requirements,
 and smaller distribution footprint (no JDK/JRE required). This doesn't necessarily mean the same code
 will _run_ faster than it would on the JVM.
+GraalVM Community Edition and Enterprise Edition also have different performance characteristics.
 
-GraalVM and Substrate VM's support for AOT compilation and native images is evolving.
-There are [limitations](https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md)
-and [unsupported features](https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md)
-you will likely encounter. This release was tested with GraalVM 1.0.0-RC1 EE; some of these notes
-may not apply to future releases. At least one AOT issue has been fixed since 1.0.0-RC1, but you
-must build Substrate VM locally to get unreleased fixes.
+GraalVM's native image capabilities have evolved across many release candidates. Several AOT issues have been fixed since 1.0.0-RC1.
+GraalVM and Substrate VM's support for AOT compilation and native images has [limitations](https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md),
+and there are [unsupported features](https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md).
+This release and its example projects were tested with GraalVM 19.0.0 Community Edition.
 
-When the `:opts ["--report-unsupported-elements-at-runtime"]` flag is set,
+GraalVM 19.0.0 (first non-RC release) changes the default class-initialization behavior of `native-image`.
+Now you must specify `--initialize-at-build-time` explicitly in your `native-image` options.
+
+There is a [known issue](https://dev.clojure.org/jira/browse/CLJ-1472) where usages of `clojure.core/locking` macro will fail compilation.
+Clojure 1.10 depends on a version of clojure.spec that uses `locking`.
+See [this commit](https://github.com/taylorwood/clojurl/commit/12b96b5e9a722b372f153436b1f6827709d0f2ab) for an example workaround.
+
+When the `--report-unsupported-elements-at-runtime` flag is set,
 some `native-image` AOT compilation issues will be deferred as runtime exceptions.
 You can try specifying this flag if `native-image` compilation fails.
 To avoid unexpected errors at runtime, don't use this flag for "production" builds.
 
-You should set `:opts ["--enable-url-protocols=http"]` to use HTTP libraries.
+Set `--enable-url-protocols=http` to use HTTP libraries.
 HTTPS is available as of 1.0.0-RC7 (e.g. `--enable-url-protocols=http,https`)
 but [requires additional configuration](https://github.com/oracle/graal/blob/master/substratevm/URL-PROTOCOLS.md#https-support).
 
@@ -110,7 +130,7 @@ compile-time optimizations.
 
 This plugin doesn't shutdown GraalVM `native-image` build servers after builds, so that subsequent
 builds are slightly faster. You can set `:opts ["--no-server"]` to not spawn a build server at
-all, or use GraalVM's `native-image` directly to manage build server(s).
+all, or use GraalVM's `native-image` command directly to manage build server(s).
 
 ### References
 
@@ -128,6 +148,6 @@ Issues and PRs are welcome!
 
 ## License
 
-Copyright © 2018 Taylor Wood.
+Copyright © 2019 Taylor Wood.
 
 Distributed under the MIT License.

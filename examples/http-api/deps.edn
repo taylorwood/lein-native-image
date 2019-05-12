@@ -10,7 +10,8 @@
  :aliases {:native-image
            {:main-opts ["-m clj.native-image http-api.core"
                         "-H:EnableURLProtocols=http"
-                        "--report-unsupported-elements-at-runtime"]
+                        "--report-unsupported-elements-at-runtime"
+                        "--initialize-at-build-time"]
             :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
             :extra-deps
             {clj.native-image

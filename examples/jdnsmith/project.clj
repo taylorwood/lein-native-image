@@ -6,7 +6,9 @@
   :main jdnsmith.core
   :target-path "target/%s"
   :native-image {:graal-bin :env/GRAALVM_HOME
-                 :opts ["--verbose"]
+                 :opts ["--verbose"
+                        "--report-unsupported-elements-at-runtime"
+                        "--initialize-at-build-time"]
                  :name "jdn"}
   :profiles {:dev {:global-vars {*warn-on-reflection* true
                                  *assert* true}}

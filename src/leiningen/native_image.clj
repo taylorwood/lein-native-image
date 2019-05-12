@@ -23,13 +23,17 @@
       (native-image-path (name bin)))
 
     (string? bin)
-    (if (cs/ends-with? bin "/native-image")
-      bin
-      (->> [(io/file bin "bin/native-image")
-            (io/file bin "native-image")]
-           (filter #(.exists %))
-           (first)
-           (absolute-path)))
+    (let [paths [(io/file bin "bin/native-image")
+                 (io/file bin "native-image")]]
+      (debug "Looking for native-image at following paths:" (cs/join "; " (map str paths)))
+      (if (cs/ends-with? bin "/native-image")
+        bin
+        (or (some->> paths
+                     (filter #(.exists %))
+                     (first)
+                     (absolute-path))
+            (do (warn "Couldn't find native-image command. You may need to install it with `gu install native-image`.")
+                (exit -1 "Couldn't find native-image command")))))
 
     :else bin))
 

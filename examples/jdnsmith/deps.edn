@@ -2,6 +2,8 @@
         org.clojure/data.json {:mvn/version "0.2.6"}}
  :aliases {:native-image
            {:main-opts ["-m clj.native-image jdnsmith.core"
+                        "--report-unsupported-elements-at-runtime"
+                        "--initialize-at-build-time"
                         "-H:Name=json2edn"]
             :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
             :extra-deps

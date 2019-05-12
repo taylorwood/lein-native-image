@@ -12,6 +12,7 @@
                  :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
                  :opts ["-H:EnableURLProtocols=http"
                         "--report-unsupported-elements-at-runtime" ;; ignore native-image build errors
+                        "--initialize-at-build-time"
                         "--no-server" ;; TODO issue with subsequent builds failing on same server
                         "--verbose"]
                  :name "server"}
