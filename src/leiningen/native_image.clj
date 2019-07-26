@@ -9,17 +9,18 @@
             [leiningen.core.project :as project])
   (:import (java.io File)))
 
-(def windows? (cs/starts-with? (System/getProperty "os.name") "Windows"))
-
-(defonce filename (if windows? "native-image.cmd" "native-image"))
-
 (defn- absolute-path [f & fs]
   (.getAbsolutePath ^File (apply io/file f fs)))
+
+(def native-image-cmd
+  (if (-> (System/getProperty "os.name") (cs/starts-with? "Windows"))
+    "native-image.cmd" ;; Windows native-image has .cmd extension
+    "native-image"))
 
 (defn- native-image-path [bin]
   (cond
     (nil? bin)
-    filename ;; assumed to be on PATH
+    native-image-cmd ;; assumed to be on PATH
 
     (keyword? bin)
     (if (= "env" (namespace bin))
@@ -27,18 +28,17 @@
       (native-image-path (name bin)))
 
     (string? bin)
-    (let [paths [(io/file bin (str "bin/" filename))
-                 (io/file bin filename)]]
-      (debug ">>>Looking for native-image at following paths:" (cs/join "; " (map str paths)))
-      (if (cs/ends-with? bin filename)
+    (let [paths [(io/file bin (str "bin/" native-image-cmd))
+                 (io/file bin native-image-cmd)]]
+      (debug "Looking for native-image at following paths:" (cs/join "; " (map str paths)))
+      (if (cs/ends-with? bin native-image-cmd)
         bin
         (or (some->> paths
                      (filter #(.exists %))
                      (first)
                      (absolute-path))
             (do (warn "Couldn't find native-image command. You may need to install it with `gu install native-image`.")
-                (exit -1 "Couldn't find native-image command")
-                ))))
+                (exit -1 "Couldn't find native-image command")))))
 
     :else bin))
 
