@@ -28,11 +28,11 @@
       (native-image-path (name bin)))
 
     (string? bin)
-    (let [paths [(io/file bin (str "bin/" native-image-cmd))
-                 (io/file bin native-image-cmd)]]
-      (debug "Looking for native-image at following paths:" (cs/join "; " (map str paths)))
-      (if (cs/ends-with? bin native-image-cmd)
-        bin
+    (if (cs/ends-with? bin native-image-cmd)
+      bin
+      (let [paths [(io/file bin "bin" native-image-cmd)
+                   (io/file bin native-image-cmd)]]
+        (debug "Looking for native-image command at these paths:" (cs/join File/pathSeparator (map str paths)))
         (or (some->> paths
                      (filter #(.exists %))
                      (first)
