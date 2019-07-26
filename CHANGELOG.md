@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.3.1] - 2019-07-25
+### Added
+- Warning for missing `native-image` on post-RC releases of GraalVM.
+### Fixed
+- Use `.cmd` extension on Windows hosts.
+
 ## [0.3.0] - 2018-07-15
 ### Added
 - Support more conventional `GRAALVM_HOME` path format i.e. `$GRAALVM_HOME/bin/native-image`

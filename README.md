@@ -44,7 +44,7 @@ See the [examples](examples) directory for projects that can be compiled to nati
    or `native-image` CLI options:
     ```clojure
     (defproject my-app "0.1.0"
-      :plugins [[io.taylorwood/lein-native-image "0.3.0"]]    ;; or in ~/.lein/profiles.clj
+      :plugins [[io.taylorwood/lein-native-image "0.3.1"]]    ;; or in ~/.lein/profiles.clj
 
       :native-image {:name "my-app"                 ;; name of output image, optional
                      :graal-bin "/path/to/graalvm/" ;; path to GraalVM home, optional
@@ -74,8 +74,8 @@ See the [examples](examples) directory for projects that can be compiled to nati
 
     You can also specify these in your Leiningen user profile `~/.lein/profiles.clj`:
     ```clojure
-    {:user {:plugins [[io.taylorwood/lein-native-image "0.3.0"]]
-            :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc1/Contents/Home/bin"}}}
+    {:user {:plugins [[io.taylorwood/lein-native-image "0.3.1"]]
+            :native-image {:graal-bin "/path/to/graalvm-ce-19.0.0/Contents/Home/bin"}}}
     ```
 
 1. Build a native image from your project:

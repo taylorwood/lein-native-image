@@ -1,5 +1,5 @@
 (defproject jdnsmith "0.1.0-SNAPSHOT"
-  :plugins [[io.taylorwood/lein-native-image "0.3.0"]]
+  :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
   :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.json "0.2.6"]]
