@@ -12,10 +12,15 @@
 (defn- absolute-path [f & fs]
   (.getAbsolutePath ^File (apply io/file f fs)))
 
+(def native-image-cmd
+  (if (-> (System/getProperty "os.name") (cs/starts-with? "Windows"))
+    "native-image.cmd" ;; Windows native-image has .cmd extension
+    "native-image"))
+
 (defn- native-image-path [bin]
   (cond
     (nil? bin)
-    "native-image" ;; assumed to be on PATH
+    native-image-cmd ;; assumed to be on PATH
 
     (keyword? bin)
     (if (= "env" (namespace bin))
@@ -23,10 +28,10 @@
       (native-image-path (name bin)))
 
     (string? bin)
-    (let [paths [(io/file bin "bin/native-image")
-                 (io/file bin "native-image")]]
+    (let [paths [(io/file bin (str "bin/" native-image-cmd))
+                 (io/file bin native-image-cmd)]]
       (debug "Looking for native-image at following paths:" (cs/join "; " (map str paths)))
-      (if (cs/ends-with? bin "/native-image")
+      (if (cs/ends-with? bin native-image-cmd)
         bin
         (or (some->> paths
                      (filter #(.exists %))
