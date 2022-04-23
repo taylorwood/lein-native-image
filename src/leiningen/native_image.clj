@@ -61,8 +61,9 @@
         project    (if profile
                      (project/merge-profiles project [profile])
                      project)
-        _          (compile/compile project :all)
         config     (:native-image project)
+        project    (project/merge-profiles project [config])
+        _          (compile/compile project :all)
         entrypoint (-> (name (:main project))
                        (cs/replace #"\-" "_"))
         dest-path  (absolute-path
