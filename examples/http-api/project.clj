@@ -8,14 +8,13 @@
                  [hickory "0.7.1"]]
   :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
   :target-path "target/%s"
-  :native-image {:graal-bin "/path/to/graalvm-1.0.0-rc2/Contents/Home/bin"
-                 :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
+  :native-image {:graal-bin :env/GRAALVM_HOME
                  :opts ["-H:EnableURLProtocols=http"
                         "--report-unsupported-elements-at-runtime" ;; ignore native-image build errors
                         "--initialize-at-build-time"
-                        "--no-server" ;; TODO issue with subsequent builds failing on same server
                         "--verbose"]
                  :name "server"}
   :main http-api.core
   :profiles {:dev {:dependencies [[org.clojure/test.check "0.9.0"]]}
+             :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
              :uberjar {:aot :all}})

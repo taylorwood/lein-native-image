@@ -56,9 +56,8 @@ See the [examples](examples) directory for projects that can be compiled to nati
                                         "--initialize-at-build-time"
                                         "--verbose"]}}
     
-                 :uberjar ;; used by default
-                 {:aot :all
-                  :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}})
+                 :native-image ;; used by default
+                 {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
     ```
 
     `:native-image` config keys:
